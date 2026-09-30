@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Calculator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0f172a; padding: 1rem; }
+    .calculator { width: 100%; max-width: 340px; background: #1e293b; border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
+    .display { background: #0f172a; border-radius: 0.75rem; padding: 1rem; text-align: right; margin-bottom: 1.25rem; min-height: 85px; display: flex; flex-direction: column; justify-content: space-around; word-break: break-all; }
+    .previous-operand { color: #94a3b8; font-size: 0.95rem; min-height: 1.2rem; }
+    .current-operand { color: #f8fafc; font-size: 2rem; font-weight: 600; }
+    .keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+    button { height: 58px; border-radius: 0.75rem; border: none; font-size: 1.25rem; font-weight: 500; cursor: pointer; color: #f8fafc; background-color: #334155; }
+    button:hover { background-color: #475569; }
+    button.operator { background-color: #f97316; }
+    button.operator:hover { background-color: #ea580c; }
+    button.function { background-color: #64748b; }
+    button.function:hover { background-color: #475569; }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display">
+      <div id="previous-operand" class="previous-operand"></div>
+      <div id="current-operand" class="current-operand">0</div>
+    </div>
+    <div class="keypad">
+      <button class="function" onclick="clearAll()">AC</button>
+      <button class="function" onclick="deleteDigit()">DEL</button>
+      <button class="function" onclick="appendOperator('%')">%</button>
+      <button class="operator" onclick="appendOperator('÷')">÷</button>
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button class="operator" onclick="appendOperator('×')">×</button>
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button class="operator" onclick="appendOperator('-')">-</button>
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+      <button onclick="toggleSign()">±</button>
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="appendDecimal()">.</button>
+      <button class="operator" onclick="calculate()">=</button>
+    </div>
+  </div>
+  <script>
+    let currentInput = "0", previousInput = "", operator = null, shouldResetDisplay = false;
+    const currentOperandEl = document.getElementById("current-operand"), previousOperandEl = document.getElementById("previous-operand");
+    function updateDisplay() { currentOperandEl.innerText = currentInput; previousOperandEl.innerText = operator != null ? `${previousInput} ${operator}` : ""; }
+    function appendNumber(num) { if (currentInput === "0" || shouldResetDisplay) { currentInput = num; shouldResetDisplay = false; } else { currentInput += num; } updateDisplay(); }
+    function appendDecimal() { if (shouldResetDisplay) { currentInput = "0."; shouldResetDisplay = false; updateDisplay(); return; } if (!currentInput.includes(".")) { currentInput += "."; updateDisplay(); } }
+    function appendOperator(op) { if (operator !== null && !shouldResetDisplay) calculate(); operator = op; previousInput = currentInput; shouldResetDisplay = true; updateDisplay(); }
+    function calculate() {
+      if (operator === null || shouldResetDisplay) return;
+      const prev = parseFloat(previousInput), current = parseFloat(currentInput);
+      if (isNaN(prev) || isNaN(current)) return;
+      let res;
+      if (operator === "+") res = prev + current;
+      else if (operator === "-") res = prev - current;
+      else if (operator === "×") res = prev * current;
+      else if (operator === "÷") { if (current === 0) { currentInput = "Error"; previousInput = ""; operator = null; shouldResetDisplay = true; updateDisplay(); return; } res = prev / current; }
+      else if (operator === "%") res = prev % current;
+      currentInput = Math.round(res * 1e12) / 1e12 + ""; operator = null; previousInput = ""; shouldResetDisplay = true; updateDisplay();
+    }
+    function clearAll() { currentInput = "0"; previousInput = ""; operator = null; shouldResetDisplay = false; updateDisplay(); }
+    function deleteDigit() { if (shouldResetDisplay) return; currentInput = currentInput.length === 1 || currentInput === "Error" ? "0" : currentInput.slice(0, -1); updateDisplay(); }
+    function toggleSign() { if (currentInput !== "0" && currentInput !== "Error") { currentInput = (parseFloat(currentInput) * -1).toString(); updateDisplay(); } }
+    window.addEventListener("keydown", (e) => {
+      if (e.key >= "0" && e.key <= "9") appendNumber(e.key);
+      else if (e.key === ".") appendDecimal();
+      else if (e.key === "=" || e.key === "Enter") { e.preventDefault(); calculate(); }
+      else if (e.key === "Backspace") deleteDigit();
+      else if (e.key === "Escape") clearAll();
+      else if (e.key === "+") appendOperator("+");
+      else if (e.key === "-") appendOperator("-");
+      else if (e.key === "*") appendOperator("×");
+      else if (e.key === "/") { e.preventDefault(); appendOperator("÷"); }
+      else if (e.key === "%") appendOperator("%");
+    });
+  </script>
+</body>
+</html>
