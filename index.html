@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Calculator & Unit Converter</title>
 
-  <!-- Mobile App / PWA Tags -->
+  <!-- PWA & Mobile Standalone Settings -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0b1120" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -81,7 +81,7 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    /* Windows / Views */
+    /* Windows */
     .view-panel {
       flex: 1;
       flex-direction: column;
@@ -173,14 +173,12 @@
       transform: scale(0.96);
     }
 
-    /* Utility keys (AC, DEL) */
     button.btn-fn {
       background-color: #475569;
       color: #f8fafc;
       font-size: 1.15rem;
     }
 
-    /* Scientific function keys */
     button.btn-sci {
       background-color: #1e293b;
       color: #38bdf8;
@@ -188,7 +186,6 @@
       border: 1px solid #334155;
     }
 
-    /* Arithmetic Operators (+, -, ×, ÷) */
     button.btn-op {
       background-color: #f97316;
       color: #ffffff;
@@ -201,7 +198,6 @@
       background-color: #ea580c;
     }
 
-    /* Extra-long Equal Button (2 Columns Wide) */
     button.btn-equal {
       grid-column: span 2;
       background-color: #ea580c;
@@ -215,7 +211,7 @@
       background-color: #c2410c;
     }
 
-    /* Unit Converter View */
+    /* Unit Converter */
     .converter-card {
       flex: 1;
       background-color: #0f172a;
@@ -318,7 +314,7 @@
 </head>
 <body>
   <div class="app-container">
-    <!-- Top Tabs (Direct Tab Switches) -->
+    <!-- Top Tabs -->
     <div class="nav-tabs">
       <button id="tab-basic" class="nav-tab active" onclick="switchWindow('basic')">Basic</button>
       <button id="tab-sci" class="nav-tab" onclick="switchWindow('sci')">Scientific</button>
@@ -358,7 +354,7 @@
       </div>
     </div>
 
-    <!-- WINDOW 2: SCIENTIFIC CALCULATOR (FUNCTION-FIRST) -->
+    <!-- WINDOW 2: SCIENTIFIC CALCULATOR -->
     <div id="view-sci" class="view-panel" style="display: none;">
       <div class="display-screen">
         <span id="sci-angle-badge" class="mode-indicator" onclick="toggleSciAngle()">DEG</span>
@@ -470,14 +466,13 @@
       </div>
     </div>
 
-    <!-- Developer Attribution Footer -->
+    <!-- Developer Footer -->
     <div class="developer-tag">
       Developed by <a href="https://github.com/Saqib7117" target="_blank" rel="noopener noreferrer">Saqib Mahmood</a>
     </div>
   </div>
 
   <script>
-    // Bulletproof Tab Switching
     function switchWindow(target) {
       document.getElementById('view-basic').style.display = 'none';
       document.getElementById('view-sci').style.display = 'none';
@@ -500,9 +495,7 @@
       }
     }
 
-    // ==========================================
-    // 1. BASIC CALCULATOR
-    // ==========================================
+    // Basic Calculator State
     let bCur = "0", bPrev = "", bOp = null, bReset = false;
     const bCurEl = document.getElementById("basic-cur");
     const bPrevEl = document.getElementById("basic-prev");
@@ -587,9 +580,7 @@
       updateBasic();
     }
 
-    // ==========================================
-    // 2. SCIENTIFIC CALCULATOR (FUNCTION-FIRST)
-    // ==========================================
+    // Scientific Calculator State
     let sExpr = "";
     let sIsDeg = true;
     const sCurEl = document.getElementById("sci-cur");
@@ -650,22 +641,16 @@
 
       try {
         let parsed = sExpr;
-
-        // Auto-close missing parentheses
         let openP = (parsed.match(/\(/g) \vert{}\vert{} []).length;         let closeP = (parsed.match(/\)/g) || []).length;
         if (openP > closeP) parsed += ")".repeat(openP - closeP);
 
-        // Replace constants and operators
         parsed = parsed.replace(/π/g, "(Math.PI)");
         parsed = parsed.replace(/e/g, "(Math.E)");
         parsed = parsed.replace(/×/g, "*");
         parsed = parsed.replace(/÷/g, "/");
         parsed = parsed.replace(/\^/g, "**");
-
-        // Factorial
         parsed = parsed.replace(/(\d+)!/g, "factorial($1)");
 
-        // Trigonometry (Deg vs Rad)
         if (sIsDeg) {
           parsed = parsed.replace(/sin\(/g, "Math.sin((Math.PI/180)*");
           parsed = parsed.replace(/cos\(/g, "Math.cos((Math.PI/180)*");
@@ -696,9 +681,7 @@
       }
     }
 
-    // ==========================================
-    // 3. UNIT CONVERTER
-    // ==========================================
+    // Unit Converter Definitions
     const unitDefinitions = {
       length: {
         "Meter (m)": 1,
@@ -807,7 +790,6 @@
       resLblEl.innerText = to;
     }
 
-    // Run initial conversion calculation on load
     runConversion();
   </script>
 </body>
