@@ -1,1 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Calculator & Unit Converter</title>
 
+  <!-- PWA & Mobile App Support -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b1120" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: #0b1120;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      max-width: 460px;
+      background-color: #1e293b;
+      display: flex;
+      flex-direction: column;
+      padding: 0.75rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.75rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+    }
+
+    @media (min-width: 600px) {
+      .app-container {
+        height: 94vh;
+        max-height: 870px;
+        border-radius: 2rem;
+        padding: 1.25rem;
+      }
+    }
+
+    /* Top Tabs */
+    .nav-tabs {
+      display: flex;
+      background-color: #0f172a;
+      border-radius: 0.85rem;
+      padding: 0.3rem;
+      margin-bottom: 0.75rem;
+      gap: 0.35rem;
+    }
+
+    .nav-tab {
+      flex: 1;
+      padding: 0.65rem 0.2rem;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 0.6rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tab.active {
+      background-color: #334155;
+      color: #f8fafc;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Views */
+    .view-panel {
+      flex: 1;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Screen Area */
+    .display-screen {
+      flex: 0 0 22%;
+      min-height: 110px;
+      background-color: #0f172a;
+      border-radius: 1.15rem;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+      word-break: break-all;
+      position: relative;
+    }
+
+    .mode-indicator {
+      position: absolute;
+      top: 0.65rem;
+      left: 0.85rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: #1e293b;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
+    }
+
+    .sub-display {
+      color: #94a3b8;
+      font-size: 1.05rem;
+      min-height: 1.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .main-display {
+      color: #f8fafc;
+      font-size: 2.85rem;
+      font-weight: 700;
+      line-height: 1.1;
+      text-align: right;
+    }
+
+    /* Keypads */
+    .keypad-basic {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 0.65rem;
+    }
+
+    .keypad-scientific {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(7, 1fr);
+      gap: 0.45rem;
+    }
+
+    /* Buttons */
+    button {
+      width: 100%;
+      height: 100%;
+      border-radius: 0.85rem;
+      border: none;
+      font-size: 1.35rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #f8fafc;
+      background-color: #334155;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: filter 0.15s ease, transform 0.06s ease;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      filter: brightness(1.25);
+      transform: scale(0.96);
+    }
+
+    button.btn-fn {
+      background-color: #475569;
+      color: #f8fafc;
+      font-size: 1.15rem;
+    }
+
+    button.btn-sci {
+      background-color: #1e293b;
+      color: #38bdf8;
+      font-size: 1rem;
+      border: 1px solid #334155;
+    }
+
+    button.btn-op {
+      background-color: #f97316;
+      color: #ffffff;
+      font-size: 1.7rem;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+    }
+
+    button.btn-op:active {
+      background-color: #ea580c;
+    }
+
+    button.btn-equal {
+      grid-column: span 2;
+      background-color: #ea580c;
+      color: #ffffff;
+      font-size: 2.2rem;
+      font-weight: 800;
+      box-shadow: 0 5px 16px rgba(234, 88, 12, 0.45);
+    }
+
+    button.btn-equal:active {
+      background-color: #c2410c;
+    }
+
+    /* Unit Converter */
+    .converter-card {
+      flex: 1;
+      background-color: #0f172a;
+      border-radius: 1.15rem;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow-y: auto;
+    }
+
+    .converter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .converter-label {
+      color: #94a3b8;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      border-radius: 0.75rem;
+      padding: 0.85rem 1rem;
+      font-size: 1.15rem;
+      font-weight: 500;
+      outline: none;
+      user-select: text;
+    }
+
+    select:focus, input[type="number"]:focus {
+      border-color: #38bdf8;
+    }
+
+    .swap-row {
+      display: flex;
+      justify-content: center;
+      margin: -0.25rem 0;
+    }
+
+    .swap-circle-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: #334155;
+      color: #38bdf8;
+      font-size: 1.4rem;
+    }
+
+    .result-display-box {
+      background: #1e293b;
+      border-radius: 0.85rem;
+      padding: 1.1rem;
+      border-left: 4px solid #f97316;
+      margin-top: 0.25rem;
+    }
+
+    .result-number {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #f8fafc;
+      word-break: break-all;
+    }
+
+    .result-unit-name {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-top: 0.35rem;
+    }
+
+    /* Footer */
+    .developer-tag {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      padding-top: 0.55rem;
+      user-select: text;
+    }
+
+    .developer-tag a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .developer-tag a:hover {
+      color: #f97316;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Tabs -->
+    <div class="nav-tabs">
+      <button id="btn-basic" class="nav-tab active" onclick="openTab('basic')">Basic</button>
+      <button id="btn-sci" class="nav-tab" onclick="openTab('sci')">Scientific</button>
+      <button id="btn-conv" class="nav-tab" onclick="openTab('conv')">Unit Converter</button>
+    </div>
+
+    <!-- WINDOW 1: BASIC CALCULATOR -->
+    <div id="view-basic" class="view-panel" style="display: flex;">
+      <div class="display-screen">
+        <div id="b-sub" class="sub-display"></div>
+        <div id="b-main" class="main-display">0</div>
+      </div>
+      <div class="keypad-basic">
+        <button class="btn-fn" onclick="bClear()">AC</button>
+        <button class="btn-fn" onclick="bDelete()">DEL</button>
+        <button class="btn-fn" onclick="bOperator('%')">%</button>
+        <button class="btn-op" onclick="bOperator('÷')">÷</button>
+
+        <button onclick="bDigit('7')">7</button>
+        <button onclick="bDigit('8')">8</button>
+        <button onclick="bDigit('9')">9</button>
+        <button class="btn-op" onclick="bOperator('×')">×</button>
+
+        <button onclick="bDigit('4')">4</button>
+        <button onclick="bDigit('5')">5</button>
+        <button onclick="bDigit('6')">6</button>
+        <button class="btn-op" onclick="bOperator('-')">-</button>
+
+        <button onclick="bDigit('1')">1</button>
+        <button onclick="bDigit('2')">2</button>
+        <button onclick="bDigit('3')">3</button>
+        <button class="btn-op" onclick="bOperator('+')">+</button>
+
+        <button onclick="bDigit('0')">0</button>
+        <button onclick="bDecimal()">.</button>
+        <button class="btn-equal" onclick="bEquals()">=</button>
+      </div>
+    </div>
+
+    <!-- WINDOW 2: SCIENTIFIC CALCULATOR -->
+    <div id="view-sci" class="view-panel" style="display: none;">
+      <div class="display-screen">
+        <span id="sci-badge" class="mode-indicator" onclick="toggleSciMode()">DEG</span>
+        <div id="s-sub" class="sub-display"></div>
+        <div id="s-main" class="main-display">0</div>
+      </div>
+      <div class="keypad-scientific">
+        <button class="btn-sci" onclick="toggleSciMode()">DEG/RAD</button>
+        <button class="btn-sci" onclick="sInput('sin(')">sin</button>
+        <button class="btn-sci" onclick="sInput('cos(')">cos</button>
+        <button class="btn-sci" onclick="sInput('tan(')">tan</button>
+        <button class="btn-fn" onclick="sClear()">AC</button>
+
+        <button class="btn-sci" onclick="sInput('π')">π</button>
+        <button class="btn-sci" onclick="sInput('e')">e</button>
+        <button class="btn-sci" onclick="sInput('log(')">log</button>
+        <button class="btn-sci" onclick="sInput('ln(')">ln</button>
+        <button class="btn-fn" onclick="sDelete()">DEL</button>
+
+        <button class="btn-sci" onclick="sInput('√(')">√</button>
+        <button class="btn-sci" onclick="sInput('^')">xʸ</button>
+        <button class="btn-sci" onclick="sInput('(')">(</button>
+        <button class="btn-sci" onclick="sInput(')')">)</button>
+        <button class="btn-op" onclick="sInput('÷')">÷</button>
+
+        <button class="btn-sci" onclick="sInput('!')">n!</button>
+        <button onclick="sInput('7')">7</button>
+        <button onclick="sInput('8')">8</button>
+        <button onclick="sInput('9')">9</button>
+        <button class="btn-op" onclick="sInput('×')">×</button>
+
+        <button class="btn-sci" onclick="sInput('%')">%</button>
+        <button onclick="sInput('4')">4</button>
+        <button onclick="sInput('5')">5</button>
+        <button onclick="sInput('6')">6</button>
+        <button class="btn-op" onclick="sInput('-')">-</button>
+
+        <button class="btn-sci" onclick="sInput('±')">±</button>
+        <button onclick="sInput('1')">1</button>
+        <button onclick="sInput('2')">2</button>
+        <button onclick="sInput('3')">3</button>
+        <button class="btn-op" onclick="sInput('+')">+</button>
+
+        <button onclick="sInput('0')">0</button>
+        <button onclick="sInput('00')">00</button>
+        <button onclick="sInput('.')">.</button>
+        <button class="btn-equal" onclick="sEquals()">=</button>
+      </div>
+    </div>
+
+    <!-- WINDOW 3: UNIT CONVERTER -->
+    <div id="view-conv" class="view-panel" style="display: none;">
+      <div class="converter-card">
+        <div class="converter-group">
+          <label class="converter-label">Select Category</label>
+          <select id="u-category" onchange="changeUnitCategory()">
+            <option value="length" selected>Length</option>
+            <option value="weight">Weight / Mass</option>
+            <option value="temp">Temperature</option>
+            <option value="area">Area</option>
+            <option value="volume">Volume</option>
+            <option value="speed">Speed</option>
+          </select>
+        </div>
+
+        <div class="converter-group">
+          <label class="converter-label">From</label>
+          <input type="number" id="u-val" value="1" oninput="doConvert()" />
+          <select id="u-from" onchange="doConvert()">
+            <option value="Meter (m)" selected>Meter (m)</option>
+            <option value="Kilometer (km)">Kilometer (km)</option>
+            <option value="Centimeter (cm)">Centimeter (cm)</option>
+            <option value="Millimeter (mm)">Millimeter (mm)</option>
+            <option value="Foot (ft)">Foot (ft)</option>
+            <option value="Inch (in)">Inch (in)</option>
+            <option value="Mile (mi)">Mile (mi)</option>
+          </select>
+        </div>
+
+        <div class="swap-row">
+          <button class="swap-circle-btn" onclick="swapUnitFields()">⇄</button>
+        </div>
+
+        <div class="converter-group">
+          <label class="converter-label">To</label>
+          <select id="u-to" onchange="doConvert()">
+            <option value="Meter (m)">Meter (m)</option>
+            <option value="Kilometer (km)">Kilometer (km)</option>
+            <option value="Centimeter (cm)">Centimeter (cm)</option>
+            <option value="Millimeter (mm)">Millimeter (mm)</option>
+            <option value="Foot (ft)" selected>Foot (ft)</option>
+            <option value="Inch (in)">Inch (in)</option>
+            <option value="Mile (mi)">Mile (mi)</option>
+          </select>
+        </div>
+
+        <div class="result-display-box">
+          <div class="converter-label">Converted Output</div>
+          <div id="u-result-num" class="result-number">3.28084</div>
+          <div id="u-result-unit" class="result-unit-name">Foot (ft)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Developer Attribution Footer -->
+    <div class="developer-tag">
+      Developed by <a href="https://github.com/Saqib7117" target="_blank" rel="noopener noreferrer">Saqib Mahmood</a>
+    </div>
+  </div>
+
+  <script>
+    // Tab Switching
+    function openTab(tab) {
+      document.getElementById('view-basic').style.display = 'none';
+      document.getElementById('view-sci').style.display = 'none';
+      document.getElementById('view-conv').style.display = 'none';
+
+      document.getElementById('btn-basic').classList.remove('active');
+      document.getElementById('btn-sci').classList.remove('active');
+      document.getElementById('btn-conv').classList.remove('active');
+
+      if (tab === 'basic') {
+        document.getElementById('view-basic').style.display = 'flex';
+        document.getElementById('btn-basic').classList.add('active');
+      } else if (tab === 'sci') {
+        document.getElementById('view-sci').style.display = 'flex';
+        document.getElementById('btn-sci').classList.add('active');
+      } else if (tab === 'conv') {
+        document.getElementById('view-conv').style.display = 'flex';
+        document.getElementById('btn-conv').classList.add('active');
+        doConvert();
+      }
+    }
+
+    // 1. BASIC CALCULATOR
+    let bValue = "0", bOldValue = "", bCurrentOp = null, bMustReset = false;
+    const bMainEl = document.getElementById("b-main");
+    const bSubEl = document.getElementById("b-sub");
+
+    function bRender() {
+      bMainEl.innerText = bValue;
+      bSubEl.innerText = bCurrentOp ? `${bOldValue} ${bCurrentOp}` : "";
+    }
+
+    function bDigit(d) {
+      if (bValue === "0" || bMustReset) {
+        bValue = d;
+        bMustReset = false;
+      } else {
+        if (bValue.length < 14) bValue += d;
+      }
+      bRender();
+    }
+
+    function bDecimal() {
+      if (bMustReset) {
+        bValue = "0.";
+        bMustReset = false;
+        bRender();
+        return;
+      }
+      if (!bValue.includes(".")) {
+        bValue += ".";
+        bRender();
+      }
+    }
+
+    function bOperator(op) {
+      if (bCurrentOp && !bMustReset) bEquals();
+      bCurrentOp = op;
+      bOldValue = bValue;
+      bMustReset = true;
+      bRender();
+    }
+
+    function bEquals() {
+      if (!bCurrentOp || bMustReset) return;
+      const p = parseFloat(bOldValue), c = parseFloat(bValue);
+      if (isNaN(p) || isNaN(c)) return;
+
+      let res;
+      if (bCurrentOp === "+") res = p + c;
+      else if (bCurrentOp === "-") res = p - c;
+      else if (bCurrentOp === "×") res = p * c;
+      else if (bCurrentOp === "÷") {
+        if (c === 0) { bValue = "Error"; bOldValue = ""; bCurrentOp = null; bMustReset = true; bRender(); return; }
+        res = p / c;
+      } else if (bCurrentOp === "%") {
+        res = p % c;
+      }
+
+      bValue = Math.round(res * 1e11) / 1e11 + "";
+      bOldValue = "";
+      bCurrentOp = null;
+      bMustReset = true;
+      bRender();
+    }
+
+    function bClear() {
+      bValue = "0";
+      bOldValue = "";
+      bCurrentOp = null;
+      bMustReset = false;
+      bRender();
+    }
+
+    function bDelete() {
+      if (bMustReset) return;
+      bValue = (bValue.length === 1 || bValue === "Error") ? "0" : bValue.slice(0, -1);
+      bRender();
+    }
+
+    // 2. SCIENTIFIC CALCULATOR (FUNCTION FIRST)
+    let sFormula = "";
+    let sDegrees = true;
+    const sMainEl = document.getElementById("s-main");
+    const sSubEl = document.getElementById("s-sub");
+    const sBadgeEl = document.getElementById("sci-badge");
+
+    function toggleSciMode() {
+      sDegrees = !sDegrees;
+      sBadgeEl.innerText = sDegrees ? "DEG" : "RAD";
+    }
+
+    function sInput(token) {
+      if (sFormula === "Error") sFormula = "";
+      if (token === "±") {
+        if (sFormula.startsWith("-")) sFormula = sFormula.slice(1);
+        else sFormula = "-" + sFormula;
+      } else {
+        sFormula += token;
+      }
+      sMainEl.innerText = sFormula || "0";
+    }
+
+    function sClear() {
+      sFormula = "";
+      sMainEl.innerText = "0";
+      sSubEl.innerText = "";
+    }
+
+    function sDelete() {
+      if (!sFormula || sFormula === "Error") {
+        sFormula = "";
+      } else {
+        const fullTokens = ["sin(", "cos(", "tan(", "log(", "ln(", "√("];
+        let stripped = false;
+        for (let fn of fullTokens) {
+          if (sFormula.endsWith(fn)) {
+            sFormula = sFormula.slice(0, -fn.length);
+            stripped = true;
+            break;
+          }
+        }
+        if (!stripped) sFormula = sFormula.slice(0, -1);
+      }
+      sMainEl.innerText = sFormula || "0";
+    }
+
+    function factCalc(n) {
+      if (n < 0 || !Number.isInteger(n)) return NaN;
+      if (n > 120) return Infinity;
+      let r = 1;
+      for (let i = 2; i <= n; i++) r *= i;
+      return r;
+    }
+
+    function sEquals() {
+      if (!sFormula || sFormula === "Error") return;
+      sSubEl.innerText = sFormula + " =";
+
+      try {
+        let expr = sFormula;
+        let openCount = (expr.match(/\(/g) \vert{}\vert{} []).length;         let closeCount = (expr.match(/\)/g) || []).length;
+        if (openCount > closeCount) expr += ")".repeat(openCount - closeCount);
+
+        expr = expr.replace(/π/g, "(Math.PI)");
+        expr = expr.replace(/e/g, "(Math.E)");
+        expr = expr.replace(/×/g, "*");
+        expr = expr.replace(/÷/g, "/");
+        expr = expr.replace(/\^/g, "**");
+        expr = expr.replace(/(\d+)!/g, "factCalc($1)");
+
+        if (sDegrees) {
+          expr = expr.replace(/sin\(/g, "Math.sin((Math.PI/180)*");
+          expr = expr.replace(/cos\(/g, "Math.cos((Math.PI/180)*");
+          expr = expr.replace(/tan\(/g, "Math.tan((Math.PI/180)*");
+        } else {
+          expr = expr.replace(/sin\(/g, "Math.sin(");
+          expr = expr.replace(/cos\(/g, "Math.cos(");
+          expr = expr.replace(/tan\(/g, "Math.tan(");
+        }
+
+        expr = expr.replace(/log\(/g, "Math.log10(");
+        expr = expr.replace(/ln\(/g, "Math.log(");
+        expr = expr.replace(/√\(/g, "Math.sqrt(");
+
+        const out = Function("factCalc", `"use strict"; return (${expr});`)(factCalc);
+
+        if (isNaN(out) || !isFinite(out)) {
+          sMainEl.innerText = "Error";
+          sFormula = "";
+        } else {
+          const finalVal = Math.round(out * 1e10) / 1e10;
+          sMainEl.innerText = finalVal.toString();
+          sFormula = finalVal.toString();
+        }
+      } catch (e) {
+        sMainEl.innerText = "Error";
+        sFormula = "";
+      }
+    }
+
+    // 3. UNIT CONVERTER
+    const unitsData = {
+      length: {
+        "Meter (m)": 1,
+        "Kilometer (km)": 1000,
+        "Centimeter (cm)": 0.01,
+        "Millimeter (mm)": 0.001,
+        "Foot (ft)": 0.3048,
+        "Inch (in)": 0.0254,
+        "Yard (yd)": 0.9144,
+        "Mile (mi)": 1609.344
+      },
+      weight: {
+        "Kilogram (kg)": 1,
+        "Gram (g)": 0.001,
+        "Milligram (mg)": 0.000001,
+        "Pound (lb)": 0.453592,
+        "Ounce (oz)": 0.0283495,
+        "Metric Ton (t)": 1000
+      },
+      temp: {
+        "Celsius (°C)": "C",
+        "Fahrenheit (°F)": "F",
+        "Kelvin (K)": "K"
+      },
+      area: {
+        "Square Meter (m²)": 1,
+        "Square Kilometer (km²)": 1000000,
+        "Square Foot (ft²)": 0.092903,
+        "Square Mile (mi²)": 2589988.11,
+        "Acre": 4046.86,
+        "Hectare": 10000
+      },
+      volume: {
+        "Liter (L)": 1,
+        "Milliliter (mL)": 0.001,
+        "Cubic Meter (m³)": 1000,
+        "Gallon (US)": 3.78541,
+        "Cup (US)": 0.24,
+        "Fluid Ounce (fl oz)": 0.0295735
+      },
+      speed: {
+        "Kilometers/hour (km/h)": 1,
+        "Miles/hour (mph)": 1.60934,
+        "Meters/sec (m/s)": 3.6,
+        "Knot (kn)": 1.852
+      }
+    };
+
+    function changeUnitCategory() {
+      const cat = document.getElementById("u-category").value;
+      const fromEl = document.getElementById("u-from");
+      const toEl = document.getElementById("u-to");
+      fromEl.innerHTML = "";
+      toEl.innerHTML = "";
+
+      const keys = Object.keys(unitsData[cat]);
+      keys.forEach((unitName) => {
+        fromEl.add(new Option(unitName, unitName));
+        toEl.add(new Option(unitName, unitName));
+      });
+
+      if (keys.length > 1) toEl.selectedIndex = 1;
+      doConvert();
+    }
+
+    function swapUnitFields() {
+      const fromEl = document.getElementById("u-from");
+      const toEl = document.getElementById("u-to");
+      const temp = fromEl.selectedIndex;
+      fromEl.selectedIndex = toEl.selectedIndex;
+      toEl.selectedIndex = temp;
+      doConvert();
+    }
+
+    function doConvert() {
+      const cat = document.getElementById("u-category").value;
+      const val = parseFloat(document.getElementById("u-val").value);
+      const from = document.getElementById("u-from").value;
+      const to = document.getElementById("u-to").value;
+      const resNumEl = document.getElementById("u-result-num");
+      const resUnitEl = document.getElementById("u-result-unit");
+
+      if (isNaN(val)) {
+        resNumEl.innerText = "0";
+        resUnitEl.innerText = to;
+        return;
+      }
+
+      let res;
+      if (cat === "temp") {
+        let c;
+        if (from.includes("Celsius")) c = val;
+        else if (from.includes("Fahrenheit")) c = (val - 32) * (5 / 9);
+        else c = val - 273.15;
+
+        if (to.includes("Celsius")) res = c;
+        else if (to.includes("Fahrenheit")) res = (c * 9 / 5) + 32;
+        else res = c + 273.15;
+      } else {
+        const rates = unitsData[cat];
+        const base = val * rates[from];
+        res = base / rates[to];
+      }
+
+      resNumEl.innerText = (Math.round(res * 1e8) / 1e8).toLocaleString();
+      resUnitEl.innerText = to;
+    }
+
+    doConvert();
+  </script>
+</body>
+</html>
