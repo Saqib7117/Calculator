@@ -30,7 +30,7 @@
       align-items: center;
     }
 
-    /* Container: Full-screen on mobile, centered card on large desktop */
+    /* Container: Full-screen on mobile, centered card on desktop */
     .calculator-app {
       width: 100%;
       height: 100vh;
@@ -39,14 +39,14 @@
       background-color: #1e293b;
       display: flex;
       flex-direction: column;
-      padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px)) 1rem;
+      padding: 1rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px)) 1rem;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
     }
 
     @media (min-width: 600px) {
       .calculator-app {
         height: 92vh;
-        max-height: 840px;
+        max-height: 850px;
         border-radius: 2rem;
         padding: 1.5rem;
       }
@@ -54,8 +54,8 @@
 
     /* Display Area */
     .display {
-      flex: 0 0 26%;
-      min-height: 140px;
+      flex: 0 0 24%;
+      min-height: 120px;
       background-color: #0f172a;
       border-radius: 1.25rem;
       padding: 1.25rem 1.5rem;
@@ -63,7 +63,7 @@
       flex-direction: column;
       justify-content: flex-end;
       align-items: flex-end;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
       overflow: hidden;
       word-break: break-all;
     }
@@ -84,7 +84,7 @@
       max-width: 100%;
     }
 
-    /* Keypad Grid: Expands to fill available screen height */
+    /* Keypad Grid */
     .keypad {
       flex: 1;
       display: grid;
@@ -93,13 +93,13 @@
       gap: 0.75rem;
     }
 
-    /* Default Buttons */
+    /* Buttons */
     button {
       width: 100%;
       height: 100%;
       border-radius: 1rem;
       border: none;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 600;
       cursor: pointer;
       color: #f8fafc;
@@ -116,14 +116,14 @@
       transform: scale(0.96);
     }
 
-    /* Top Utility Buttons (AC, DEL, %) */
+    /* Top Utility Buttons */
     button.function-btn {
       background-color: #475569;
       color: #f1f5f9;
       font-size: 1.3rem;
     }
 
-    /* Large Operator Buttons (+, -, ×, ÷, =) */
+    /* Large Operator Buttons (+, -, ×, ÷) */
     button.operator-btn {
       background-color: #f97316;
       color: #ffffff;
@@ -136,11 +136,12 @@
       background-color: #ea580c;
     }
 
-    /* Extra-large Equal Button */
+    /* Extra-Long Equal Button */
     button.equal-btn {
+      grid-column: span 2;
       background-color: #ea580c;
       color: #ffffff;
-      font-size: 2.3rem;
+      font-size: 2.4rem;
       font-weight: 800;
       box-shadow: 0 6px 18px rgba(234, 88, 12, 0.5);
     }
@@ -148,11 +149,33 @@
     button.equal-btn:active {
       background-color: #c2410c;
     }
+
+    /* Developer Credit Footer */
+    .developer-tag {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      padding-top: 0.75rem;
+      user-select: text;
+    }
+
+    .developer-tag a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+
+    .developer-tag a:hover {
+      color: #f97316;
+    }
   </style>
 </head>
 <body>
   <div class="calculator-app">
-    <!-- Screen -->
+    <!-- Screen Display -->
     <div class="display">
       <div id="previous-operand" class="previous-operand"></div>
       <div id="current-operand" class="current-operand">0</div>
@@ -180,10 +203,14 @@
       <button onclick="appendNumber('3')">3</button>
       <button class="operator-btn" onclick="appendOperator('+')">+</button>
 
-      <button onclick="toggleSign()">±</button>
       <button onclick="appendNumber('0')">0</button>
       <button onclick="appendDecimal()">.</button>
       <button class="equal-btn" onclick="calculate()">=</button>
+    </div>
+
+    <!-- Footer Attribution -->
+    <div class="developer-tag">
+      Developed by <a href="https://github.com/Saqib7117" target="_blank" rel="noopener noreferrer">Saqib Mahmood</a>
     </div>
   </div>
 
@@ -312,15 +339,9 @@
       updateDisplay();
     }
 
-    function toggleSign() {
-      if (currentInput === "0" || currentInput === "Error") return;
-      currentInput = (parseFloat(currentInput) * -1).toString();
-      updateDisplay();
-    }
-
     // Keyboard support
     window.addEventListener("keydown", (e) => {
-      if (e.key >= "0" && e.key <= "9") appendNumber(e.key);
+      if ((e.key >= "0" && e.key <= "9")) appendNumber(e.key);
       if (e.key === ".") appendDecimal();
       if (e.key === "=" || e.key === "Enter") {
         e.preventDefault();
