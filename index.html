@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Calculator & Unit Converter</title>
+  <title>Scientific & Matrix Calculator</title>
 
   <!-- PWA & Mobile App Support -->
   <link rel="manifest" href="manifest.json" />
@@ -34,40 +34,40 @@
       width: 100%;
       height: 100vh;
       height: 100dvh;
-      max-width: 460px;
+      max-width: 480px;
       background-color: #1e293b;
       display: flex;
       flex-direction: column;
-      padding: 0.75rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.75rem;
+      padding: 0.65rem 0.65rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.65rem;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
     }
 
     @media (min-width: 600px) {
       .app-container {
         height: 94vh;
-        max-height: 870px;
+        max-height: 900px;
         border-radius: 2rem;
         padding: 1.25rem;
       }
     }
 
-    /* Tabs */
+    /* Top Navigation Tabs */
     .nav-tabs {
       display: flex;
       background-color: #0f172a;
       border-radius: 0.85rem;
-      padding: 0.3rem;
-      margin-bottom: 0.75rem;
-      gap: 0.35rem;
+      padding: 0.25rem;
+      margin-bottom: 0.65rem;
+      gap: 0.25rem;
     }
 
     .nav-tab {
       flex: 1;
-      padding: 0.65rem 0.2rem;
+      padding: 0.55rem 0.15rem;
       border: none;
       background: transparent;
       color: #94a3b8;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 600;
       border-radius: 0.6rem;
       cursor: pointer;
@@ -81,25 +81,25 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    /* Views */
+    /* View Panels */
     .view-panel {
       flex: 1;
       flex-direction: column;
-      overflow: hidden;
+      overflow-y: auto;
     }
 
-    /* Screen */
+    /* Calculator Displays */
     .display-screen {
-      flex: 0 0 22%;
-      min-height: 110px;
+      flex: 0 0 20%;
+      min-height: 100px;
       background-color: #0f172a;
-      border-radius: 1.15rem;
-      padding: 0.85rem 1.25rem;
+      border-radius: 1rem;
+      padding: 0.85rem 1.15rem;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       align-items: flex-end;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.65rem;
       overflow: hidden;
       word-break: break-all;
       position: relative;
@@ -107,9 +107,9 @@
 
     .mode-indicator {
       position: absolute;
-      top: 0.65rem;
-      left: 0.85rem;
-      font-size: 0.75rem;
+      top: 0.6rem;
+      left: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: #38bdf8;
       background: #1e293b;
@@ -120,14 +120,14 @@
 
     .sub-display {
       color: #94a3b8;
-      font-size: 1.05rem;
-      min-height: 1.4rem;
-      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+      min-height: 1.3rem;
+      margin-bottom: 0.2rem;
     }
 
     .main-display {
       color: #f8fafc;
-      font-size: 2.85rem;
+      font-size: 2.6rem;
       font-weight: 700;
       line-height: 1.1;
       text-align: right;
@@ -139,24 +139,23 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: repeat(5, 1fr);
-      gap: 0.65rem;
+      gap: 0.6rem;
     }
 
     .keypad-scientific {
       flex: 1;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(7, 1fr);
-      gap: 0.45rem;
+      grid-template-rows: repeat(8, 1fr);
+      gap: 0.35rem;
     }
 
-    /* Buttons */
     button {
       width: 100%;
       height: 100%;
-      border-radius: 0.85rem;
+      border-radius: 0.75rem;
       border: none;
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 600;
       cursor: pointer;
       color: #f8fafc;
@@ -176,22 +175,21 @@
     button.btn-fn {
       background-color: #475569;
       color: #f8fafc;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
     }
 
     button.btn-sci {
       background-color: #1e293b;
       color: #38bdf8;
-      font-size: 1rem;
+      font-size: 0.92rem;
       border: 1px solid #334155;
     }
 
     button.btn-op {
       background-color: #f97316;
       color: #ffffff;
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
     }
 
     button.btn-op:active {
@@ -202,36 +200,141 @@
       grid-column: span 2;
       background-color: #ea580c;
       color: #ffffff;
-      font-size: 2.2rem;
+      font-size: 2.1rem;
       font-weight: 800;
-      box-shadow: 0 5px 16px rgba(234, 88, 12, 0.45);
+      box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);
     }
 
-    button.btn-equal:active {
-      background-color: #c2410c;
+    /* Matrix Interface */
+    .matrix-card {
+      flex: 1;
+      background-color: #0f172a;
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      overflow-y: auto;
+    }
+
+    .matrix-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .matrix-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .dim-btn {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+      border-radius: 0.5rem;
+      background-color: #334155;
+      color: #f8fafc;
+      width: auto;
+      height: auto;
+    }
+
+    .matrix-grid {
+      display: grid;
+      gap: 0.4rem;
+      margin: 0.35rem 0;
+    }
+
+    .matrix-grid.dim-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .matrix-grid.dim-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .matrix-cell {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      border-radius: 0.5rem;
+      padding: 0.6rem;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      outline: none;
+      user-select: text;
+    }
+
+    .matrix-ops {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+    }
+
+    .matrix-op-btn {
+      padding: 0.6rem 0.2rem;
+      font-size: 0.85rem;
+      border-radius: 0.6rem;
+      background-color: #334155;
+      color: #f8fafc;
+      width: 100%;
+      height: auto;
+    }
+
+    .matrix-op-btn.highlight {
+      background-color: #f97316;
+      color: #fff;
+    }
+
+    .matrix-result-box {
+      background: #1e293b;
+      border-radius: 0.75rem;
+      padding: 0.85rem;
+      border-left: 4px solid #f97316;
+      margin-top: 0.25rem;
+    }
+
+    .matrix-result-grid {
+      display: grid;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+    }
+
+    .res-cell {
+      background: #0f172a;
+      border-radius: 0.4rem;
+      padding: 0.45rem;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #38bdf8;
     }
 
     /* Unit Converter */
     .converter-card {
       flex: 1;
       background-color: #0f172a;
-      border-radius: 1.15rem;
-      padding: 1.25rem;
+      border-radius: 1rem;
+      padding: 1.1rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.85rem;
       overflow-y: auto;
     }
 
     .converter-group {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
 
     .converter-label {
       color: #94a3b8;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -243,8 +346,8 @@
       border: 1px solid #334155;
       color: #f8fafc;
       border-radius: 0.75rem;
-      padding: 0.85rem 1rem;
-      font-size: 1.15rem;
+      padding: 0.8rem 1rem;
+      font-size: 1.1rem;
       font-weight: 500;
       outline: none;
       user-select: text;
@@ -261,24 +364,23 @@
     }
 
     .swap-circle-btn {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background-color: #334155;
       color: #38bdf8;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
     }
 
     .result-display-box {
       background: #1e293b;
       border-radius: 0.85rem;
-      padding: 1.1rem;
+      padding: 1rem;
       border-left: 4px solid #f97316;
-      margin-top: 0.25rem;
     }
 
     .result-number {
-      font-size: 1.85rem;
+      font-size: 1.8rem;
       font-weight: 700;
       color: #f8fafc;
       word-break: break-all;
@@ -287,17 +389,17 @@
     .result-unit-name {
       color: #94a3b8;
       font-size: 0.95rem;
-      margin-top: 0.35rem;
+      margin-top: 0.3rem;
     }
 
     /* Footer */
     .developer-tag {
       text-align: center;
       color: #64748b;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 500;
       letter-spacing: 0.4px;
-      padding-top: 0.55rem;
+      padding-top: 0.45rem;
       user-select: text;
     }
 
@@ -314,11 +416,12 @@
 </head>
 <body>
   <div class="app-container">
-    <!-- Top Tabs -->
+    <!-- Top Tabs (4 Windows) -->
     <div class="nav-tabs">
       <button id="btn-basic" class="nav-tab active" onclick="openTab('basic')">Basic</button>
       <button id="btn-sci" class="nav-tab" onclick="openTab('sci')">Scientific</button>
-      <button id="btn-conv" class="nav-tab" onclick="openTab('conv')">Unit Converter</button>
+      <button id="btn-matrix" class="nav-tab" onclick="openTab('matrix')">Matrices</button>
+      <button id="btn-conv" class="nav-tab" onclick="openTab('conv')">Converter</button>
     </div>
 
     <!-- WINDOW 1: BASIC CALCULATOR -->
@@ -354,7 +457,7 @@
       </div>
     </div>
 
-    <!-- WINDOW 2: SCIENTIFIC CALCULATOR -->
+    <!-- WINDOW 2: COMPREHENSIVE SCIENTIFIC CALCULATOR -->
     <div id="view-sci" class="view-panel" style="display: none;">
       <div class="display-screen">
         <span id="sci-badge" class="mode-indicator" onclick="toggleSciMode()">DEG</span>
@@ -362,50 +465,109 @@
         <div id="s-main" class="main-display">0</div>
       </div>
       <div class="keypad-scientific">
+        <!-- Row 1: Trig & DEG/RAD -->
         <button class="btn-sci" onclick="toggleSciMode()">DEG/RAD</button>
         <button class="btn-sci" onclick="sInput('sin(')">sin</button>
         <button class="btn-sci" onclick="sInput('cos(')">cos</button>
         <button class="btn-sci" onclick="sInput('tan(')">tan</button>
         <button class="btn-fn" onclick="sClear()">AC</button>
 
+        <!-- Row 2: Inverses -->
+        <button class="btn-sci" onclick="sInput('asin(')">sin⁻¹</button>
+        <button class="btn-sci" onclick="sInput('acos(')">cos⁻¹</button>
+        <button class="btn-sci" onclick="sInput('atan(')">tan⁻¹</button>
         <button class="btn-sci" onclick="sInput('π')">π</button>
-        <button class="btn-sci" onclick="sInput('e')">e</button>
-        <button class="btn-sci" onclick="sInput('log(')">log</button>
-        <button class="btn-sci" onclick="sInput('ln(')">ln</button>
         <button class="btn-fn" onclick="sDelete()">DEL</button>
 
-        <button class="btn-sci" onclick="sInput('√(')">√</button>
-        <button class="btn-sci" onclick="sInput('^')">xʸ</button>
-        <button class="btn-sci" onclick="sInput('(')">(</button>
-        <button class="btn-sci" onclick="sInput(')')">)</button>
+        <!-- Row 3: Hyperbolics & e -->
+        <button class="btn-sci" onclick="sInput('sinh(')">sinh</button>
+        <button class="btn-sci" onclick="sInput('cosh(')">cosh</button>
+        <button class="btn-sci" onclick="sInput('tanh(')">tanh</button>
+        <button class="btn-sci" onclick="sInput('e')">e</button>
         <button class="btn-op" onclick="sInput('÷')">÷</button>
 
+        <!-- Row 4: Logarithms & Roots -->
+        <button class="btn-sci" onclick="sInput('log(')">log</button>
+        <button class="btn-sci" onclick="sInput('ln(')">ln</button>
+        <button class="btn-sci" onclick="sInput('√(')">√</button>
+        <button class="btn-sci" onclick="sInput('cbrt(')">∛</button>
+        <button class="btn-op" onclick="sInput('×')">×</button>
+
+        <!-- Row 5: Powers & Factorial -->
+        <button class="btn-sci" onclick="sInput('^2')">x²</button>
+        <button class="btn-sci" onclick="sInput('^3')">x³</button>
+        <button class="btn-sci" onclick="sInput('^')">xʸ</button>
         <button class="btn-sci" onclick="sInput('!')">n!</button>
+        <button class="btn-op" onclick="sInput('-')">-</button>
+
+        <!-- Row 6: Numbers & Parentheses -->
+        <button class="btn-sci" onclick="sInput('(')">(</button>
         <button onclick="sInput('7')">7</button>
         <button onclick="sInput('8')">8</button>
         <button onclick="sInput('9')">9</button>
-        <button class="btn-op" onclick="sInput('×')">×</button>
+        <button class="btn-op" onclick="sInput('+')">+</button>
 
-        <button class="btn-sci" onclick="sInput('%')">%</button>
+        <!-- Row 7: Numbers & Absolute Value -->
+        <button class="btn-sci" onclick="sInput(')')">)</button>
         <button onclick="sInput('4')">4</button>
         <button onclick="sInput('5')">5</button>
         <button onclick="sInput('6')">6</button>
-        <button class="btn-op" onclick="sInput('-')">-</button>
+        <button class="btn-sci" onclick="sInput('abs(')">|x|</button>
 
-        <button class="btn-sci" onclick="sInput('±')">±</button>
+        <!-- Row 8: 1-3, 0, Decimal, Equal -->
         <button onclick="sInput('1')">1</button>
         <button onclick="sInput('2')">2</button>
         <button onclick="sInput('3')">3</button>
-        <button class="btn-op" onclick="sInput('+')">+</button>
-
         <button onclick="sInput('0')">0</button>
-        <button onclick="sInput('00')">00</button>
         <button onclick="sInput('.')">.</button>
-        <button class="btn-equal" onclick="sEquals()">=</button>
+        <button class="btn-equal" onclick="sEquals()" style="grid-column: span 5; margin-top: 0.2rem;">=</button>
       </div>
     </div>
 
-    <!-- WINDOW 3: UNIT CONVERTER -->
+    <!-- WINDOW 3: MATRICES CALCULATOR -->
+    <div id="view-matrix" class="view-panel" style="display: none;">
+      <div class="matrix-card">
+        <!-- Dimension Switcher -->
+        <div class="matrix-header">
+          <span class="matrix-title">Matrix Dimension</span>
+          <div>
+            <button class="dim-btn" id="dim-2-btn" onclick="setMatrixDim(2)" style="background:#f97316;">2 × 2</button>
+            <button class="dim-btn" id="dim-3-btn" onclick="setMatrixDim(3)">3 × 3</button>
+          </div>
+        </div>
+
+        <!-- Matrix A -->
+        <span class="converter-label">Matrix A</span>
+        <div id="mat-a-grid" class="matrix-grid dim-2"></div>
+
+        <!-- Matrix B -->
+        <span class="converter-label">Matrix B</span>
+        <div id="mat-b-grid" class="matrix-grid dim-2"></div>
+
+        <!-- Operations -->
+        <span class="converter-label">Operations</span>
+        <div class="matrix-ops">
+          <button class="matrix-op-btn highlight" onclick="matrixBinaryOp('add')">A + B</button>
+          <button class="matrix-op-btn highlight" onclick="matrixBinaryOp('sub')">A - B</button>
+          <button class="matrix-op-btn highlight" onclick="matrixBinaryOp('mul')">A × B</button>
+          <button class="matrix-op-btn" onclick="matrixUnaryOp('detA')">det(A)</button>
+          <button class="matrix-op-btn" onclick="matrixUnaryOp('invA')">A⁻¹</button>
+          <button class="matrix-op-btn" onclick="matrixUnaryOp('transA')">Aᵀ</button>
+          <button class="matrix-op-btn" onclick="matrixUnaryOp('detB')">det(B)</button>
+          <button class="matrix-op-btn" onclick="matrixUnaryOp('invB')">B⁻¹</button>
+          <button class="matrix-op-btn" onclick="matrixUnaryOp('transB')">Bᵀ</button>
+        </div>
+
+        <!-- Matrix Result -->
+        <div class="matrix-result-box">
+          <div id="matrix-res-title" class="converter-label">Matrix Output</div>
+          <div id="matrix-res-val" style="color:#f8fafc; font-weight:700; font-size:1.1rem; margin-top:0.35rem;">Enter values and choose operation</div>
+          <div id="matrix-res-grid" class="matrix-result-grid dim-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WINDOW 4: UNIT CONVERTER -->
     <div id="view-conv" class="view-panel" style="display: none;">
       <div class="converter-card">
         <div class="converter-group">
@@ -417,6 +579,8 @@
             <option value="area">Area</option>
             <option value="volume">Volume</option>
             <option value="speed">Speed</option>
+            <option value="pressure">Pressure</option>
+            <option value="data">Digital Data</option>
           </select>
         </div>
 
@@ -459,54 +623,33 @@
       </div>
     </div>
 
-    <!-- Developer Attribution Footer -->
+    <!-- Developer Footer -->
     <div class="developer-tag">
       Developed by <a href="https://github.com/Saqib7117" target="_blank" rel="noopener noreferrer">Saqib Mahmood</a>
     </div>
   </div>
 
   <script>
-    // Automatic on-screen error catcher for immediate diagnostics
-    window.onerror = function(msg, url, line) {
-      alert("Script notice line " + line + ": " + msg);
-    };
-
-    // Helper: Safely get element with fallbacks
-    function findEl(idList) {
-      for (let i = 0; i < idList.length; i++) {
-        let el = document.getElementById(idList[i]);
-        if (el) return el;
-      }
-      return null;
-    }
-
-    // Tab Switching
+    // Tab Navigation
     window.openTab = function(tab) {
-      const pBasic = findEl(['view-basic']);
-      const pSci = findEl(['view-sci']);
-      const pConv = findEl(['view-conv']);
-
-      if (pBasic) pBasic.style.display = (tab === 'basic') ? 'flex' : 'none';
-      if (pSci) pSci.style.display = (tab === 'sci') ? 'flex' : 'none';
-      if (pConv) pConv.style.display = (tab === 'conv') ? 'flex' : 'none';
-
-      const bBasic = findEl(['btn-basic', 'tab-basic']);
-      const bSci = findEl(['btn-sci', 'tab-sci']);
-      const bConv = findEl(['btn-conv', 'tab-conv']);
-
-      if (bBasic) bBasic.classList.toggle('active', tab === 'basic');
-      if (bSci) bSci.classList.toggle('active', tab === 'sci');
-      if (bConv) bConv.classList.toggle('active', tab === 'conv');
-
+      const views = ['basic', 'sci', 'matrix', 'conv'];
+      views.forEach(v => {
+        const panel = document.getElementById('view-' + v);
+        const btn = document.getElementById('btn-' + v);
+        if (panel) panel.style.display = (v === tab) ? 'flex' : 'none';
+        if (btn) btn.classList.toggle('active', v === tab);
+      });
       if (tab === 'conv') window.doConvert();
     };
 
+    // ==========================================
     // 1. BASIC CALCULATOR
+    // ==========================================
     let bValue = "0", bOldValue = "", bCurrentOp = null, bMustReset = false;
 
     function bRender() {
-      const main = findEl(['b-main', 'basic-cur', 'current-operand']);
-      const sub = findEl(['b-sub', 'basic-prev', 'previous-operand']);
+      const main = document.getElementById('b-main');
+      const sub = document.getElementById('b-sub');
       if (main) main.innerText = bValue;
       if (sub) sub.innerText = bCurrentOp ? (bOldValue + " " + bCurrentOp) : "";
     }
@@ -579,32 +722,29 @@
       bRender();
     };
 
+    // ==========================================
     // 2. SCIENTIFIC CALCULATOR
+    // ==========================================
     let sFormula = "";
     let sDegrees = true;
 
     window.toggleSciMode = function() {
       sDegrees = !sDegrees;
-      const badge = findEl(['sci-badge', 'sci-angle-badge']);
+      const badge = document.getElementById('sci-badge');
       if (badge) badge.innerText = sDegrees ? "DEG" : "RAD";
     };
 
     window.sInput = function(token) {
       if (sFormula === "Error") sFormula = "";
-      if (token === "±") {
-        if (sFormula.startsWith("-")) sFormula = sFormula.slice(1);
-        else sFormula = "-" + sFormula;
-      } else {
-        sFormula += token;
-      }
-      const main = findEl(['s-main', 'sci-cur']);
+      sFormula += token;
+      const main = document.getElementById('s-main');
       if (main) main.innerText = sFormula || "0";
     };
 
     window.sClear = function() {
       sFormula = "";
-      const main = findEl(['s-main', 'sci-cur']);
-      const sub = findEl(['s-sub', 'sci-prev']);
+      const main = document.getElementById('s-main');
+      const sub = document.getElementById('s-sub');
       if (main) main.innerText = "0";
       if (sub) sub.innerText = "";
     };
@@ -613,7 +753,7 @@
       if (!sFormula || sFormula === "Error") {
         sFormula = "";
       } else {
-        const fullTokens = ["sin(", "cos(", "tan(", "log(", "ln(", "√("];
+        const fullTokens = ["asin(", "acos(", "atan(", "sinh(", "cosh(", "tanh(", "sin(", "cos(", "tan(", "log(", "ln(", "√(", "cbrt(", "abs("];
         let stripped = false;
         for (let i = 0; i < fullTokens.length; i++) {
           let fn = fullTokens[i];
@@ -625,7 +765,7 @@
         }
         if (!stripped) sFormula = sFormula.slice(0, -1);
       }
-      const main = findEl(['s-main', 'sci-cur']);
+      const main = document.getElementById('s-main');
       if (main) main.innerText = sFormula || "0";
     };
 
@@ -639,13 +779,14 @@
 
     window.sEquals = function() {
       if (!sFormula || sFormula === "Error") return;
-      const sub = findEl(['s-sub', 'sci-prev']);
-      const main = findEl(['s-main', 'sci-cur']);
+      const sub = document.getElementById('s-sub');
+      const main = document.getElementById('s-main');
       if (sub) sub.innerText = sFormula + " =";
 
       try {
         let expr = sFormula;
-        let openCount = (expr.match(/\(/g) \vert{}\vert{} []).length;         let closeCount = (expr.match(/\)/g) || []).length;
+        let openCount = (expr.match(/\(/g) || []).length;
+        let closeCount = (expr.match(/\)/g) || []).length;
         if (openCount > closeCount) expr += ")".repeat(openCount - closeCount);
 
         expr = expr.replace(/π/g, "(Math.PI)");
@@ -655,19 +796,34 @@
         expr = expr.replace(/\^/g, "**");
         expr = expr.replace(/(\d+)!/g, "factCalc($1)");
 
+        // Inverse Trigonometry
         if (sDegrees) {
+          expr = expr.replace(/asin\(/g, "(180/Math.PI)*Math.asin(");
+          expr = expr.replace(/acos\(/g, "(180/Math.PI)*Math.acos(");
+          expr = expr.replace(/atan\(/g, "(180/Math.PI)*Math.atan(");
           expr = expr.replace(/sin\(/g, "Math.sin((Math.PI/180)*");
           expr = expr.replace(/cos\(/g, "Math.cos((Math.PI/180)*");
           expr = expr.replace(/tan\(/g, "Math.tan((Math.PI/180)*");
         } else {
+          expr = expr.replace(/asin\(/g, "Math.asin(");
+          expr = expr.replace(/acos\(/g, "Math.acos(");
+          expr = expr.replace(/atan\(/g, "Math.atan(");
           expr = expr.replace(/sin\(/g, "Math.sin(");
           expr = expr.replace(/cos\(/g, "Math.cos(");
           expr = expr.replace(/tan\(/g, "Math.tan(");
         }
 
+        // Hyperbolic
+        expr = expr.replace(/sinh\(/g, "Math.sinh(");
+        expr = expr.replace(/cosh\(/g, "Math.cosh(");
+        expr = expr.replace(/tanh\(/g, "Math.tanh(");
+
+        // Logs & Roots
         expr = expr.replace(/log\(/g, "Math.log10(");
         expr = expr.replace(/ln\(/g, "Math.log(");
         expr = expr.replace(/√\(/g, "Math.sqrt(");
+        expr = expr.replace(/cbrt\(/g, "Math.cbrt(");
+        expr = expr.replace(/abs\(/g, "Math.abs(");
 
         const out = Function("factCalc", `"use strict"; return (${expr});`)(factCalc);
 
@@ -685,23 +841,165 @@
       }
     };
 
-    // 3. UNIT CONVERTER
+    // ==========================================
+    // 3. MATRIX CALCULATOR
+    // ==========================================
+    let matrixDim = 2;
+
+    function buildMatrixInputs() {
+      const aGrid = document.getElementById('mat-a-grid');
+      const bGrid = document.getElementById('mat-b-grid');
+      aGrid.className = `matrix-grid dim-${matrixDim}`;
+      bGrid.className = `matrix-grid dim-${matrixDim}`;
+      aGrid.innerHTML = "";
+      bGrid.innerHTML = "";
+
+      for (let r = 0; r < matrixDim; r++) {
+        for (let c = 0; c < matrixDim; c++) {
+          aGrid.innerHTML += `<input type="number" id="a_${r}_${c}" class="matrix-cell" value="${r === c ? 1 : 0}">`;
+          bGrid.innerHTML += `<input type="number" id="b_${r}_${c}" class="matrix-cell" value="${r === c ? 2 : 0}">`;
+        }
+      }
+    }
+
+    window.setMatrixDim = function(dim) {
+      matrixDim = dim;
+      document.getElementById('dim-2-btn').style.background = dim === 2 ? '#f97316' : '#334155';
+      document.getElementById('dim-3-btn').style.background = dim === 3 ? '#f97316' : '#334155';
+      buildMatrixInputs();
+    };
+
+    function readMatrix(prefix) {
+      const m = [];
+      for (let r = 0; r < matrixDim; r++) {
+        m[r] = [];
+        for (let c = 0; c < matrixDim; c++) {
+          const val = parseFloat(document.getElementById(`${prefix}_${r}_${c}`).value);
+          m[r][c] = isNaN(val) ? 0 : val;
+        }
+      }
+      return m;
+    }
+
+    function displayMatrixResult(title, content, isScalar) {
+      document.getElementById('matrix-res-title').innerText = title;
+      const resValEl = document.getElementById('matrix-res-val');
+      const resGridEl = document.getElementById('matrix-res-grid');
+      resGridEl.innerHTML = "";
+
+      if (isScalar) {
+        resValEl.style.display = "block";
+        resValEl.innerText = content;
+        resGridEl.style.display = "none";
+      } else {
+        resValEl.style.display = "none";
+        resGridEl.style.display = "grid";
+        resGridEl.className = `matrix-result-grid dim-${content.length}`;
+        for (let r = 0; r < content.length; r++) {
+          for (let c = 0; c < content[r].length; c++) {
+            resGridEl.innerHTML += `<div class="res-cell">${content[r][c]}</div>`;
+          }
+        }
+      }
+    }
+
+    function det2(m) { return m[0][0]*m - m[0]*m[0]; }
+    function det3(m) {
+      return m[0][0]*(m*m - m*m)
+           - m[0]*(m[0]*m - m*m[0])
+           + m[0]*(m[0]*m - m*m[0]);
+    }
+
+    function inv2(m) {
+      const d = det2(m);
+      if (Math.abs(d) < 1e-10) return null;
+      return [
+        [Math.round((m[1]/d)*1e4)/1e4, Math.round((-m[0]/d)*1e4)/1e4],
+        [Math.round((-m[1][0]/d)*1e4)/1e4, Math.round((m[0][0]/d)*1e4)/1e4]
+      ];
+    }
+
+    function inv3(m) {
+      const d = det3(m);
+      if (Math.abs(d) < 1e-10) return null;
+      const adj = [
+        [ (m[1]*m - m*m), -(m[0]*m - m[0]*m),  (m[0]*m - m[0]*m) ],
+        [-(m[1][0]*m - m*m[0]),  (m[0][0]*m - m[0]*m[0]), -(m[0][0]*m - m[0]*m[0]) ],
+        [ (m[1][0]*m - m*m[0]), -(m[0][0]*m - m[0]*m[0]),  (m[0][0]*m - m[0]*m[0]) ]
+      ];
+      return adj.map(row => row.map(v => Math.round((v / d) * 1e4) / 1e4));
+    }
+
+    window.matrixUnaryOp = function(op) {
+      const target = op.endsWith('B') ? 'b' : 'a';
+      const name = target.toUpperCase();
+      const m = readMatrix(target);
+
+      if (op.startsWith('det')) {
+        const d = (matrixDim === 2) ? det2(m) : det3(m);
+        displayMatrixResult(`det(${name})`, `Determinant: ${Math.round(d * 1e6) / 1e6}`, true);
+      } else if (op.startsWith('trans')) {
+        const t = [];
+        for (let r = 0; r < matrixDim; r++) {
+          t[r] = [];
+          for (let c = 0; c < matrixDim; c++) t[r][c] = m[c][r];
+        }
+        displayMatrixResult(`${name}ᵀ (Transpose)`, t, false);
+      } else if (op.startsWith('inv')) {
+        const inv = (matrixDim === 2) ? inv2(m) : inv3(m);
+        if (!inv) displayMatrixResult(`${name}⁻¹`, "Matrix is Singular (No Inverse)", true);
+        else displayMatrixResult(`${name}⁻¹ (Inverse)`, inv, false);
+      }
+    };
+
+    window.matrixBinaryOp = function(op) {
+      const a = readMatrix('a');
+      const b = readMatrix('b');
+      const res = [];
+
+      if (op === 'add') {
+        for (let r = 0; r < matrixDim; r++) {
+          res[r] = [];
+          for (let c = 0; c < matrixDim; c++) res[r][c] = a[r][c] + b[r][c];
+        }
+        displayMatrixResult("A + B", res, false);
+      } else if (op === 'sub') {
+        for (let r = 0; r < matrixDim; r++) {
+          res[r] = [];
+          for (let c = 0; c < matrixDim; c++) res[r][c] = a[r][c] - b[r][c];
+        }
+        displayMatrixResult("A - B", res, false);
+      } else if (op === 'mul') {
+        for (let r = 0; r < matrixDim; r++) {
+          res[r] = [];
+          for (let c = 0; c < matrixDim; c++) {
+            let sum = 0;
+            for (let k = 0; k < matrixDim; k++) sum += a[r][k] * b[k][c];
+            res[r][c] = Math.round(sum * 1e5) / 1e5;
+          }
+        }
+        displayMatrixResult("A × B", res, false);
+      }
+    };
+
+    // ==========================================
+    // 4. UNIT CONVERTER
+    // ==========================================
     const unitsData = {
       length: { "Meter (m)": 1, "Kilometer (km)": 1000, "Centimeter (cm)": 0.01, "Millimeter (mm)": 0.001, "Foot (ft)": 0.3048, "Inch (in)": 0.0254, "Yard (yd)": 0.9144, "Mile (mi)": 1609.344 },
       weight: { "Kilogram (kg)": 1, "Gram (g)": 0.001, "Milligram (mg)": 0.000001, "Pound (lb)": 0.453592, "Ounce (oz)": 0.0283495, "Metric Ton (t)": 1000 },
       temp: { "Celsius (°C)": "C", "Fahrenheit (°F)": "F", "Kelvin (K)": "K" },
-      area: { "Square Meter (m²)": 1, "Square Kilometer (km²)": 1000000, "Square Foot (ft²)": 0.092903, "Square Mile (mi²)": 2589988.11, "Acre": 4046.86, "Hectare": 10000 },
+      area: { "Square Meter (m²)": 1, "Square Kilometer (km²)": 1e6, "Square Foot (ft²)": 0.092903, "Square Mile (mi²)": 2589988.11, "Acre": 4046.86, "Hectare": 10000 },
       volume: { "Liter (L)": 1, "Milliliter (mL)": 0.001, "Cubic Meter (m³)": 1000, "Gallon (US)": 3.78541, "Cup (US)": 0.24, "Fluid Ounce (fl oz)": 0.0295735 },
-      speed: { "Kilometers/hour (km/h)": 1, "Miles/hour (mph)": 1.60934, "Meters/sec (m/s)": 3.6, "Knot (kn)": 1.852 }
+      speed: { "Kilometers/hour (km/h)": 1, "Miles/hour (mph)": 1.60934, "Meters/sec (m/s)": 3.6, "Knot (kn)": 1.852 },
+      pressure: { "Pascal (Pa)": 1, "Bar": 100000, "Atmosphere (atm)": 101325, "PSI": 6894.76, "Torr (mmHg)": 133.322 },
+      data: { "Byte (B)": 1, "Kilobyte (KB)": 1024, "Megabyte (MB)": 1048576, "Gigabyte (GB)": 1073741824, "Terabyte (TB)": 1099511627776 }
     };
 
     window.changeUnitCategory = function() {
-      const catEl = findEl(['u-category', 'conv-cat']);
-      const fromEl = findEl(['u-from', 'conv-from']);
-      const toEl = findEl(['u-to', 'conv-to']);
-      if (!catEl || !fromEl || !toEl) return;
-
-      const cat = catEl.value;
+      const cat = document.getElementById("u-category").value;
+      const fromEl = document.getElementById("u-from");
+      const toEl = document.getElementById("u-to");
       fromEl.innerHTML = "";
       toEl.innerHTML = "";
 
@@ -716,9 +1014,8 @@
     };
 
     window.swapUnitFields = function() {
-      const fromEl = findEl(['u-from', 'conv-from']);
-      const toEl = findEl(['u-to', 'conv-to']);
-      if (!fromEl || !toEl) return;
+      const fromEl = document.getElementById("u-from");
+      const toEl = document.getElementById("u-to");
       const temp = fromEl.selectedIndex;
       fromEl.selectedIndex = toEl.selectedIndex;
       toEl.selectedIndex = temp;
@@ -726,19 +1023,12 @@
     };
 
     window.doConvert = function() {
-      const catEl = findEl(['u-category', 'conv-cat']);
-      const valEl = findEl(['u-val', 'conv-input']);
-      const fromEl = findEl(['u-from', 'conv-from']);
-      const toEl = findEl(['u-to', 'conv-to']);
-      const resNumEl = findEl(['u-result-num', 'conv-result-val']);
-      const resUnitEl = findEl(['u-result-unit', 'conv-result-lbl']);
-
-      if (!catEl || !valEl || !fromEl || !toEl || !resNumEl || !resUnitEl) return;
-
-      const cat = catEl.value;
-      const val = parseFloat(valEl.value);
-      const from = fromEl.value;
-      const to = toEl.value;
+      const cat = document.getElementById("u-category").value;
+      const val = parseFloat(document.getElementById("u-val").value);
+      const from = document.getElementById("u-from").value;
+      const to = document.getElementById("u-to").value;
+      const resNumEl = document.getElementById("u-result-num");
+      const resUnitEl = document.getElementById("u-result-unit");
 
       if (isNaN(val)) {
         resNumEl.innerText = "0";
@@ -768,8 +1058,9 @@
       resUnitEl.innerText = to;
     };
 
-    // Render initial screen
+    // Initial setup on load
     bRender();
+    buildMatrixInputs();
     window.doConvert();
   </script>
 </body>
